@@ -1,10 +1,12 @@
 import requests
 
-url = "https://dark-sky.p.rapidapi.com/%7Blatitude%7D,%7Blongitude%7D"  
+url = 'https://api.jikan.moe/v4/top/anime' 
 response = requests.get(url)
 
-if response.status_code == 200:  # Verificar si la solicitud fue exitosa
-    data = response.json()  # Convertir la respuesta JSON en un diccionario de Python
-    print(data)
+if response.status_code == 200:  
+    data = response.json()  
+    for e in data['data']:
+     print(e['title'])
 else:
     print("Error en la solicitud:", response.status_code)
+
