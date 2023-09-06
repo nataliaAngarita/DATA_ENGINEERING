@@ -7,7 +7,10 @@ response = requests.get("https://data.covid19india.org/state_district_wise.json"
 
 if response.status_code == 200:
     data = response.json()
-    print(data)
+    i = 1
+    for key, value in list(data.items())[:10]:
+        print(f"Fila {i}: Clave: {key}, Valor: {value}")
+        i += 1
 else:
     print(f'Error al obtener los datos de la API. Código de estado: {response.status_code}')
     data = None
