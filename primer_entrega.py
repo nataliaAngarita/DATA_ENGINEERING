@@ -2,8 +2,11 @@
 import requests
 import json
 import psycopg2
+from decouple import config
 
-response = requests.get("https://data.covid19india.org/state_district_wise.json")
+## es una API de conversión de moneda profesional y gratuita para obtener los últimos tipos de cambio
+response = requests.get("https://v6.exchangerate-api.com/v6/ca5154d92bea03d7a10649f7/latest/USD")
+
 
 if response.status_code == 200:
     data = response.json()
@@ -16,30 +19,27 @@ else:
     data = None
 
 # conexión a Redshift
-dbname = 'data-engineer-database'
-user = 'buitragonatalia778_coderhouse'
-password = 'kDWUk04BR0'
-host = 'data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com'
-port = '5439'  
+DB_NAME = config('DB_NAME')
+DB_USER = config('DB_USER')
+DB_PASSWORD = config('DB_PASSWORD')
+DB_HOST = config('DB_HOST')
+DB_PORT = config('DB_PORT')
 
 conn = psycopg2.connect(
-    dbname=dbname,
-    user=user,
-    password=password,
-    host=host,
-    port=port
+    dbname=DB_NAME,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    host=DB_HOST,
+    port=DB_PORT
 )
 
 cur = conn.cursor()
 
 create_table_sql = """
-CREATE TABLE IF NOT EXISTS COVID (
-    notes varchar(20),
-    active int,
-    confirmed int,
-    migratedother int,
-    deceased int,
-    recovered int
+CREATE TABLE IF NOT EXISTS CAMBIO_MONEDA (
+    codigo_moneda VARCHAR(3),
+    tasa_cambio NUMERIC(10, 6),
+    ultima_actualizacion TIMESTAMP
 
 );
 """
