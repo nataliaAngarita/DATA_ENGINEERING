@@ -35,8 +35,5 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
-
-
-# Ejecuta la consulta para crear la tabla (si no existe)
 cur.execute("CREATE TABLE IF NOT EXISTS CAMBIO_MONEDA (codigo_moneda VARCHAR(3), tasa_cambio NUMERIC(10, 6),fecha TIMESTAMP);")
 
